@@ -14,11 +14,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={dmSans.className}>
-        <main className="mx-auto  bg-gradient-to-r from-teal-500 to-pink-500">
-          <Suspense fallback={<Loading />}>
+            <Suspense fallback={<Loading />}>
             {children}
           </Suspense>
-        </main>
       </body>
     </html>
   );

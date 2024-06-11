@@ -3,7 +3,7 @@ import { blog } from "@/model/blog"
 const { dbConnection } = require("@/database")
 const { NextResponse } = require("next/server")
 
-export const getBlogs = async () => {
+export const GET = async () => {
     try {
         await dbConnection();
         const result = await blog.find({});
