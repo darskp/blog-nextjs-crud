@@ -3,11 +3,12 @@ import React, { Fragment, useEffect, useState } from 'react'
 import AddBlog from '../add-new-blog'
 import BlogDetails from '../blogDetails'
 import { Button } from "@/components/ui/button"
-import { ToastAction } from "@/components/ui/toast"
 import { useToast } from "@/components/ui/use-toast"
 
-const BlogOverview = () => {
+const BlogOverview = ({data}) => {
     const { toast } = useToast()
+    console.log("test",data)
+   
     const [loading, setLoading] = useState(false);
     const [openBlogDialog, setOpenBlogDialog] = useState(false);
     const [blogFormData, setBlogFormData] = useState({
@@ -22,7 +23,6 @@ const BlogOverview = () => {
                 body: JSON.stringify(blogFormData)
             });
             const content = await blogData.json();
-            console.log(content)
             if (content?.success) {
                 setLoading(false);
                 setOpenBlogDialog(false)
@@ -38,7 +38,6 @@ const BlogOverview = () => {
                 })
             }
         } catch (err) {
-            console.log(err)
             setLoading(false)
         }
     }

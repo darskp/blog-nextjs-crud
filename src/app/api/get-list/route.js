@@ -1,13 +1,11 @@
 import { blog } from "@/model/blog"
-
-const { dbConnection } = require("@/database")
-const { NextResponse } = require("next/server")
+import { dbConnection } from "@/database";
+import { NextResponse } from "next/server";
 
 export const GET = async () => {
     try {
         await dbConnection();
         const result = await blog.find({});
-        console.log(result);
         if (result) {
             return NextResponse.json({
                 success: true,

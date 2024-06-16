@@ -5,7 +5,7 @@ const BlogDetails = ({ item,path }) => {
     return (
         <Link href={path}>
             <div className='p-4 border text-white border-red-400 bg-grey' key={item?.id}>
-                <h2>{item?.name}</h2>
+                <h2>{item?.title}</h2>
             </div>
         </Link>
     )
