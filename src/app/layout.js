@@ -2,6 +2,7 @@ import { DM_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import { Suspense } from "react";
 import Loading from "../../loading";
+import { Toaster } from "@/components/ui/toaster"
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
@@ -15,7 +16,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={dmSans.className}>
             <Suspense fallback={<Loading />}>
-            {children}
+            <main>{children}</main>
+             <Toaster />
           </Suspense>
       </body>
     </html>

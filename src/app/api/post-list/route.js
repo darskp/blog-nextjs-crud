@@ -6,28 +6,30 @@ import { NextResponse } from "next/server";
 const schema = Joi.object({
     title: Joi.string()
         .min(3)
+        .required()
         .max(30),
     description: Joi.string()
         .min(3)
         .max(30)
+        .required()
 })
 
 export const POST = async (req) => {
     try {
         await dbConnection();
-        const extractedData = req.json();
+        const extractedData = await req.json();
 
         if (extractedData) {
             const { title, description } = extractedData;
-            const { error, 
-                
-             } = schema.validate({ title, description });
+            const {error,value} = schema.validate({ title, description });
+
             if (error) {
                 return NextResponse.json({
                     success: false,
                     message: error.details[0].message
                 })
             }
+
             const newBlogData = await blog.create(extractedData);
             if (newBlogData) {
                 return NextResponse.json({

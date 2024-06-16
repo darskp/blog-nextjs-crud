@@ -1,5 +1,5 @@
+import BlogOverview from '@/components/blog-overview'
 import React from 'react'
-import BlogOverview from '@/components/BlogOverview';
 
 const Blog = () => {   
     return (
