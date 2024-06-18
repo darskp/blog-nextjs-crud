@@ -1,19 +1,32 @@
 "use client"
 import React, { Fragment, useEffect, useState } from 'react'
 import AddBlog from '../add-new-blog'
-import BlogDetails from '../blogDetails'
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
+import Link from 'next/link'
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import { useRouter } from 'next/navigation'
 
-const BlogOverview = ({data}) => {
+const BlogOverview = ({ data }) => {
     const { toast } = useToast()
-    console.log("test",data)
-   
+    const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [openBlogDialog, setOpenBlogDialog] = useState(false);
     const [blogFormData, setBlogFormData] = useState({
         title: "", description: ""
     });
+
+    useEffect(() => {
+        router.refresh()
+    }, [])
+
 
     const handleSaveBlogData = async () => {
         try {
@@ -27,7 +40,8 @@ const BlogOverview = ({data}) => {
                 setLoading(false);
                 setOpenBlogDialog(false)
                 setBlogFormData({ title: "", description: "" })
-                 toast({
+                router.refresh()
+                toast({
                     title: content?.message
                 })
             } else {
@@ -56,11 +70,20 @@ const BlogOverview = ({data}) => {
                 blogFormData={blogFormData}
                 handleSaveBlogData={handleSaveBlogData}
             />
-            <div className='mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10'>
+            <div className='mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
                 {
                     data && data?.length > 0 ? (
                         data?.map((item) => (
-                            <BlogDetails item={item} key={item?.id} path={`/blog/${item.id}`} />
+                            <Card className='p-5' key={item?.id}>
+                                <CardContent>
+                                    <CardTitle className="mb-5">{item?.title}</CardTitle>
+                                    <CardDescription>{item?.description}</CardDescription>
+                                    <div className='mt-5 flex gap-5 justify-center'>
+                                        <Button>Edit</Button>
+                                        <Button>Delete</Button>
+                                    </div>
+                                </CardContent>
+                            </Card>
                         ))) : null
                 }
             </div>
