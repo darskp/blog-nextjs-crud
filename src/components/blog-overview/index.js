@@ -65,6 +65,7 @@ const BlogOverview = ({ data }) => {
             if (content?.success) {
                 setLoading(false);
                 setOpenBlogDialog(false)
+                setCurrentEditedBlogID(null)
                 setBlogFormData({ title: "", description: "" })
                 router.refresh()
                 toast({
