@@ -20,7 +20,6 @@ const getData = async () => {
 
 const Blog = async () => {
     const data = await getData()
-    console.log("test1", data)
     return (
         <div className='flex w-full flex-col bg-black p-4 min-h-screen'>
             <BlogOverview data={data} />

@@ -1,18 +1,7 @@
 import { dbConnection } from "@/database";
 import { blog } from "@/model/blog";
-import Joi from "joi";
+import { schema } from "@/model/schema";
 import { NextResponse } from "next/server";
-
-const schema = Joi.object({
-    title: Joi.string()
-        .min(3)
-        .required()
-        .max(30),
-    description: Joi.string()
-        .min(3)
-        .max(30)
-        .required()
-})
 
 export const POST = async (req) => {
     try {

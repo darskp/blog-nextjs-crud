@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
 
-const AddBlog = ({ openBlogDialog, setOpenBlogDialog, setBlogFormData, loading, blogFormData, handleSaveBlogData }) => {
+const AddBlog = ({ openBlogDialog, setOpenBlogDialog, setBlogFormData, loading, blogFormData, handleSaveBlogData,currentEditedBlogID,setCurrentEditedBlogID }) => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setBlogFormData((pre) => {
@@ -24,10 +24,11 @@ const AddBlog = ({ openBlogDialog, setOpenBlogDialog, setBlogFormData, loading, 
             <Dialog open={openBlogDialog} onOpenChange={()=>{
             setOpenBlogDialog(false);
             setBlogFormData({title:"",description:""})
+            setCurrentEditedBlogID(null)
             }}>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                        <DialogTitle>Add New Blog</DialogTitle>
+                        <DialogTitle>{ currentEditedBlogID ? "Edit Blog" : 'Add New Blog'}</DialogTitle>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid grid-cols-4 items-center gap-4">

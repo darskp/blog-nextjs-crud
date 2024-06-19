@@ -8,11 +8,18 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
-    CardHeader,
     CardTitle,
 } from "@/components/ui/card"
 import { useRouter } from 'next/navigation'
+import { Label } from '../ui/label'
+
+const deleteBlogData = async (id) => {
+    const response = await fetch(`/api/delete-list?id=${id}`, {
+        method: 'DELETE'
+    })
+    const result = await response.json();
+    return result;
+}
 
 const BlogOverview = ({ data }) => {
     const { toast } = useToast()
@@ -22,19 +29,38 @@ const BlogOverview = ({ data }) => {
     const [blogFormData, setBlogFormData] = useState({
         title: "", description: ""
     });
-
+    const [currentEditedBlogID, setCurrentEditedBlogID] = useState(null);
     useEffect(() => {
         router.refresh()
     }, [])
 
+    const handleUpdateBlog = async (item) => {
+        setCurrentEditedBlogID(item._id)
+        setOpenBlogDialog(true)
+        setBlogFormData({ title: item.title, description: item.description })
+    }
+
+    const handleDeleteBlog = async (id) => {
+        const response = await deleteBlogData(id);
+        if (response) {
+            router.refresh()
+            toast({
+                title: response?.message
+            })
+        }
+    }
 
     const handleSaveBlogData = async () => {
         try {
             setLoading(true);
-            const blogData = await fetch('/api/post-list', {
-                method: 'POST',
-                body: JSON.stringify(blogFormData)
-            });
+            const blogData = currentEditedBlogID ? (
+                await fetch(`/api/update-list?id=${currentEditedBlogID}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(blogFormData)
+                })) : (await fetch('/api/post-list', {
+                    method: 'POST',
+                    body: JSON.stringify(blogFormData)
+                }))
             const content = await blogData.json();
             if (content?.success) {
                 setLoading(false);
@@ -69,22 +95,24 @@ const BlogOverview = ({ data }) => {
                 loading={loading}
                 blogFormData={blogFormData}
                 handleSaveBlogData={handleSaveBlogData}
+                currentEditedBlogID={currentEditedBlogID}
+                setCurrentEditedBlogID={setCurrentEditedBlogID}
             />
             <div className='mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
                 {
                     data && data?.length > 0 ? (
                         data?.map((item) => (
-                            <Card className='p-5' key={item?.id}>
+                            <Card className='p-5' key={item?._id}>
                                 <CardContent>
                                     <CardTitle className="mb-5">{item?.title}</CardTitle>
                                     <CardDescription>{item?.description}</CardDescription>
                                     <div className='mt-5 flex gap-5 justify-center'>
-                                        <Button>Edit</Button>
-                                        <Button>Delete</Button>
+                                        <Button onClick={() => handleUpdateBlog(item)}>Edit</Button>
+                                        <Button onClick={() => handleDeleteBlog(item._id)}>Delete</Button>
                                     </div>
                                 </CardContent>
                             </Card>
-                        ))) : null
+                        ))) : <Label className="text-3xl font-extrabold">NO blog found</Label>
                 }
             </div>
         </Fragment>

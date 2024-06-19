@@ -7,6 +7,7 @@ export const DELETE = async (req) => {
         await dbConnection();
         const { searchParams } = new URL(req.url);
         const getCurrentBlogID = searchParams.get('id');
+        console.log("deleteCurrentBlogByIDi",getCurrentBlogID)
 
         if (!getCurrentBlogID) {
             return NextResponse.json({
@@ -14,8 +15,8 @@ export const DELETE = async (req) => {
                 message: "Blog ID is required",
             });
         }
-        const deleteCurrentBlogByID = await blog.findByIdAndUpdate(
-            deleteCurrentBlogByID
+        const deleteCurrentBlogByID = await blog.findByIdAndDelete(
+            getCurrentBlogID
         )
         if (deleteCurrentBlogByID) {
             return NextResponse.json({
